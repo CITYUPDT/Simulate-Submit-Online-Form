@@ -22,6 +22,7 @@ def fetch_info():
 
 
 def fetch_basic_info():
+
     basic_info = pd.read_excel("team-info.xlsx", sheet_name=0, header=1)
     # print(f'{basic_info} \n')
 

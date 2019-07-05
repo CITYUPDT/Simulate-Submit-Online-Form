@@ -77,11 +77,13 @@ def selenium_submit(url: str, driver):
     q14.clear()
     q14.send_keys(data.judges[0].resume)
 
+    time.sleep(3)
+
     print("All filled!")
     time.sleep(3)
 
-    print("Click submit button now!")
     driver.find_element_by_id('submit_button').click()
+    print("Click submit button now!")
 
     print("Registration success")
 

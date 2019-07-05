@@ -71,7 +71,18 @@ def set_driver():
     return driver
 
 
+def on_time_submit(url, driver):
+    submitted = False
+    while not submitted:
+        now = int(time.time())
+        if now >= data.real_start_timestamp:
+            submit.selenium_submit(url, driver)
+            submitted = True
+        time.sleep(1)
+
+
 def main():
+
     fetch.fetch_info()
 
     headers = parse_header()
@@ -79,8 +90,48 @@ def main():
 
     driver = set_driver()
 
-    submit.selenium_submit(url, driver)
+    # Submit immediately
+    # submit.selenium_submit(url, driver)
+
+    # Count down mode
+    mode = input("Test or Real registration? (T/R) ")
+    if mode == 'T' and check_registration_status() == Registration.test:
+        submit.selenium_submit(url, driver)
+    elif mode == 'R' and check_registration_status() == Registration.test:
+        test_choice = input("Now is still testing time, would you like to test? (Y/N) ")
+        if test_choice == 'Y':
+            submit.selenium_submit(url, driver)
+        elif test_choice == 'N':
+            return
+        else:
+            print("Wrong command, now quit the program.")
+    elif mode == 'T' or 'R' and check_registration_status() == Registration.gap:
+        print("Now is neither testing time nor real time for registration")
+        now = int(time.time())
+        if now < data.test_start_timestamp:
+            waiting = data.test_start_timestamp - now
+            print(f"Please wait {waiting} seconds for testing time...")
+            time.sleep(waiting - 10)
+            on_time_submit(url, driver)
+        elif data.test_end_timestamp < now < data.real_start_timestamp:
+            waiting = data.real_start_timestamp - now
+            print(f"Please wait {waiting} seconds for real time...")
+            time.sleep(waiting - 10)
+            real_url = get_url()
+            on_time_submit(real_url, driver)
+    elif mode == 'T' or 'R' and check_registration_status() == Registration.real:
+        now = int(time.time())
+        late = now - data.real_start_timestamp
+        real_choice = input(f"Now is real time and late for {late} seconds! Registration start now? (Y/N)")
+        if real_choice == 'Y' or 'y':
+            real_url = get_url()
+            submit.selenium_submit(real_url, driver)
+        elif real_choice == 'N':
+            return
 
 
 if __name__ == '__main__':
+    # fetch.fetch_info()
+    # now = int(time.time())
+    # print(data.real_start_timestamp - now)
     main()
