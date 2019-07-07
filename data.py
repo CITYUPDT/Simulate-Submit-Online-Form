@@ -9,9 +9,10 @@ test_end_datetime = None
 test_end_timestamp = None
 
 real_url = None
-real_pre_fill_time = None
+real_pre_fill_datetime = None
+real_pre_fill_timestamp = None
 real_start_datetime = None
-real_pre_fill_time = None
+real_start_timestamp = None
 
 team_name = None
 competition_type = None

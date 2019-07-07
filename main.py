@@ -21,7 +21,7 @@ def check_registration_status() -> Registration:
 
     if data.test_start_timestamp < now < data.test_end_timestamp:
         return Registration.test
-    elif now > data.real_pre_fill_time:
+    elif now > data.real_pre_fill_timestamp:
         return Registration.real
     else:
         return Registration.gap
@@ -67,7 +67,7 @@ def set_driver():
     driver = None
     if 'Windows' in platform.system():
         driver = webdriver.Chrome(executable_path='venv\chromedriver.exe', options=chrome_options)
-    print("Set up driver success!")
+    print("Driver is set! \n")
     return driver
 
 
@@ -75,17 +75,17 @@ def on_time_submit(url, driver):
     submitted = False
     while not submitted:
         now = int(time.time())
-        if now >= data.real_pre_fill_time:
+        if now >= data.real_pre_fill_timestamp:
             submit.selenium_submit(url, driver)
             submitted = True
         time.sleep(1)
 
 
 def main():
-
     fetch.fetch_info()
+    print('\nFetched team info! \n')
 
-    # headers = parse_header()
+    headers = parse_header()
     url = get_url()
 
     driver = set_driver()
@@ -95,17 +95,19 @@ def main():
 
     # Count down mode
     mode = input("Test or Real registration? (T/R) ")
-    if mode == 'T' or 't' and check_registration_status() == Registration.test:
+    print('')
+    if mode == 'T' and check_registration_status() == Registration.test:
         submit.selenium_submit(url, driver)
-    elif mode == 'R' or 'r' and check_registration_status() == Registration.test:
+    elif mode == 'R' and check_registration_status() == Registration.test:
         test_choice = input("Now is still testing time, would you like to test? (Y/N) ")
+        print('')
         if test_choice == 'Y':
             submit.selenium_submit(url, driver)
         elif test_choice == 'N':
             return
         else:
             print("Wrong command, now quit the program.")
-    elif mode == 'T' or 't' or 'R' or 'r' and check_registration_status() == Registration.gap:
+    elif mode == 'T' or 'R' and check_registration_status() == Registration.gap:
         print("Now is neither testing time nor real time for registration")
         now = int(time.time())
         if now < data.test_start_timestamp:
@@ -113,16 +115,17 @@ def main():
             print(f"Please wait {waiting} seconds for testing time...")
             time.sleep(waiting - 10)
             on_time_submit(url, driver)
-        elif data.test_end_timestamp < now < data.real_pre_fill_time:
-            waiting = data.real_pre_fill_time - now
+        elif data.test_end_timestamp < now < data.real_pre_fill_timestamp:
+            waiting = data.real_pre_fill_timestamp - now
             print(f"Please wait {waiting} seconds for filling time...")
             time.sleep(waiting - 10)
             real_url = get_url()
             on_time_submit(real_url, driver)
-    elif mode == 'T' or 't' or 'R' or 'r' and check_registration_status() == Registration.real:
+    elif mode == 'T' or 'R' and check_registration_status() == Registration.real:
         now = int(time.time())
-        late = now - data.real_pre_fill_time
+        late = now - data.real_pre_fill_timestamp
         real_choice = input(f"Now is real time and late for {late} seconds! Registration start now? (Y/N)")
+        print('')
         if real_choice == 'Y' or 'y':
             real_url = get_url()
             submit.selenium_submit(real_url, driver)

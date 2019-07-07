@@ -12,7 +12,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 pd.set_option('display.max_colwidth', 100)
 
-team_info_file = "team-info.xlsx"
+team_info_file = "test.xlsx"
 
 
 def fetch_info():
@@ -23,8 +23,8 @@ def fetch_info():
 
 def fetch_basic_info():
 
-    basic_info = pd.read_excel("team-info.xlsx", sheet_name=0, header=1)
-    # print(f'{basic_info} \n')
+    basic_info = pd.read_excel(team_info_file, sheet_name=0, header=1)
+    print(f'{basic_info} \n')
 
     data.test_url = basic_info["测试链接"][0]
     data.test_start_datetime = datetime.strptime(basic_info["测试开始时间"][0], '%Y-%m-%d %H:%M')
@@ -33,16 +33,17 @@ def fetch_basic_info():
     data.test_end_timestamp = int(time.mktime(data.test_end_datetime.timetuple()))
 
     data.real_url = basic_info["正式链接"][0]
-    data.real_pre_fill_time = datetime.strptime(basic_info["开始填表时间"][0], '%Y-%m-%d %H:%M')
+    data.real_pre_fill_datetime = datetime.strptime(basic_info["开始填表时间"][0], '%Y-%m-%d %H:%M')
+    data.real_pre_fill_timestamp = int(time.mktime(data.real_pre_fill_datetime.timetuple()))
     data.real_start_datetime = datetime.strptime(basic_info["报名开始时间"][0], '%Y-%m-%d %H:%M')
-    data.real_pre_fill_time = int(time.mktime(data.real_start_datetime.timetuple()))
+    data.real_start_timestamp = int(time.mktime(data.real_start_datetime.timetuple()))
 
     data.team_name = basic_info["队伍名称"][0]
     data.competition_type = basic_info["比赛项目"][0]
 
 
 def fetch_team_info():
-    team_info = pd.read_excel("team-info.xlsx", sheet_name=1, header=1).fillna(-1).astype(str)
+    team_info = pd.read_excel(team_info_file, sheet_name=1, header=1).fillna(-1).astype(str)
     # print(f'{team_info} \n')
 
     member_count = team_info["队员姓名"].count()
@@ -68,7 +69,7 @@ def fetch_team_info():
 
 
 def fetch_judge_info():
-    judge_info = pd.read_excel("team-info.xlsx", sheet_name=2, header=1).astype(str)
+    judge_info = pd.read_excel(team_info_file, sheet_name=2, header=1).astype(str)
     # print(f"{judge_info} \n")
 
     judge_count = judge_info["评委姓名"].count()

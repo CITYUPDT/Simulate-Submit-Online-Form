@@ -10,7 +10,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 def selenium_submit(url: str, driver):
 
-    print(f"Getting resources from {url} ...")
+    print(f"Getting web page source from {url} ...")
 
     driver.get(url)
 
@@ -20,16 +20,20 @@ def selenium_submit(url: str, driver):
     page = BeautifulSoup(driver.page_source, 'lxml').prettify()
     # print(page)
 
-    print("Got web page, now start filling")
+    print("Got source! \n")
     time.sleep(3)
 
+    print('Now start filling...')
     # Start filling the form
     q1 = driver.find_element_by_id("q1")
     q1.clear()
     q1.send_keys(data.team_name)
 
-    q2_js = 'document.getElementById("q2_2").click()'
-    driver.execute_script(q2_js)
+    q2_1_js = 'document.getElementById("q2_1").checked = true'
+    driver.execute_script(q2_1_js)
+
+    q2_2_js = 'document.getElementById("q2_2").checked = true'
+    driver.execute_script(q2_2_js)
 
     q3 = driver.find_element_by_id("q3")
     q3.clear()
@@ -81,7 +85,7 @@ def selenium_submit(url: str, driver):
 
     time.sleep(3)
 
-    print("All filled!")
+    print("All filled! \n")
     time.sleep(3)
 
     # Fill the form first
@@ -91,17 +95,17 @@ def selenium_submit(url: str, driver):
     driver.quit()
     end = time.time()
     registration_time = Decimal(end - start).quantize(Decimal('0.00'), rounding=ROUND_HALF_UP)
-    print(f"It took {registration_time} seconds, now quit")
+    print(f"It took {registration_time} seconds, now quit!")
 
 
 def wait_until_submit(driver):
     # TODO: finish wait until operations
-    print("Click submit button now!")
+    print("Click submit button now!\n")
     driver.find_element_by_id('submit_button').click()
     submitted_time = time.time()
 
-    print(f"Registration success! \n"
-          f"Form is submitted at {datetime.utcfromtimestamp(submitted_time).strftime('%Y-%m-%d %H:%M:%S:%ms')}")
+    print(f"Registration success! \n\n"
+          f"Form is submitted at {datetime.utcfromtimestamp(submitted_time).strftime('%Y-%m-%d %H:%M:%S:%m')}")
 
 
 if __name__ == '__main__':
