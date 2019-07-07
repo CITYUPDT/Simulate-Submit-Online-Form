@@ -72,14 +72,16 @@ def fetch_judge_info():
     judge_info = pd.read_excel(team_info_file, sheet_name=2, header=1).astype(str)
     # print(f"{judge_info} \n")
 
+    # This can handle the case that more than one judges
     judge_count = judge_info["评委姓名"].count()
     for i in range(judge_count):
         name = judge_info["评委姓名"][i]
+        year = judge_info["评委本科入学年份"][i]
         qq = judge_info["评委QQ"][i].split('.')[0]
         phone = judge_info["评委手机号"][i].split('.')[0]
         resume = judge_info["评委履历"][i]
 
-        judge = data.Judge(name, qq, phone, resume)
+        judge = data.Judge(name, year, qq, phone, resume)
         data.judges.append(judge)
 
 

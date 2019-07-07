@@ -36,6 +36,7 @@ team = []  # A list of team member
 @dataclass
 class Judge:
     name: str
+    year: str
     qq: str
     phone: str
     resume: str
