@@ -18,7 +18,7 @@ def selenium_submit(url: str, driver):
 
     # Registration web page source code
     page = BeautifulSoup(driver.page_source, 'lxml').prettify()
-    # print(page)
+    print(page)
 
     print("Got source! \n")
     time.sleep(3)
