@@ -24,7 +24,7 @@ def fetch_info():
 def fetch_basic_info():
 
     basic_info = pd.read_excel(team_info_file, sheet_name=0, header=1)
-    print(f'{basic_info} \n')
+    # print(f'{basic_info} \n')
 
     data.test_url = basic_info["测试链接"][0]
     data.test_start_datetime = datetime.strptime(basic_info["测试开始时间"][0], '%Y-%m-%d %H:%M')
