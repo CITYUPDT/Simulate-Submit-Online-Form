@@ -24,7 +24,7 @@ def selenium_submit(url: str, driver):
     time.sleep(3)
 
     print('Now start filling...')
-    # Start filling the form
+    # TODO: (Modify) Start filling the form
     q1 = driver.find_element_by_id("q1")
     q1.clear()
     q1.send_keys(data.team_name)
