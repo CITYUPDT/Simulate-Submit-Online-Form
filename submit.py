@@ -3,6 +3,7 @@
 import data
 
 import time
+from datetime import datetime
 from bs4 import BeautifulSoup
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -15,6 +16,7 @@ def selenium_submit(url: str, driver):
 
     start = time.time()
 
+    # Registration web page source code
     page = BeautifulSoup(driver.page_source, 'lxml').prettify()
     # print(page)
 
@@ -82,10 +84,9 @@ def selenium_submit(url: str, driver):
     print("All filled!")
     time.sleep(3)
 
-    driver.find_element_by_id('submit_button').click()
-    print("Click submit button now!")
-
-    print("Registration success")
+    # Fill the form first
+    # Wait until submit time
+    wait_until_submit(driver)
 
     driver.quit()
     end = time.time()
@@ -93,5 +94,15 @@ def selenium_submit(url: str, driver):
     print(f"It took {registration_time} seconds, now quit")
 
 
+def wait_until_submit(driver):
+    # TODO: finish wait until operations
+    print("Click submit button now!")
+    driver.find_element_by_id('submit_button').click()
+    submitted_time = time.time()
+
+    print(f"Registration success! \n"
+          f"Form is submitted at {datetime.utcfromtimestamp(submitted_time).strftime('%Y-%m-%d %H:%M:%S:%ms')}")
+
+
 if __name__ == '__main__':
-    print()
+    print(datetime.utcfromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S:%M'))
