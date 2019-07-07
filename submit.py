@@ -99,7 +99,11 @@ def selenium_submit(url: str, driver):
 
 
 def wait_until_submit(driver):
-    # TODO: finish wait until operations
+    now = int(time.time())
+    waiting = data.real_start_timestamp - now
+    if now < data.real_start_timestamp:
+        print(f"Please wait {waiting} seconds for submit time...")
+        time.sleep(waiting)
     print("Click submit button now!\n")
     driver.find_element_by_id('submit_button').click()
     submitted_time = time.time()

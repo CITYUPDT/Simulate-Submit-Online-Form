@@ -104,7 +104,12 @@ def main():
         if test_choice == 'Y':
             submit.selenium_submit(url, driver)
         elif test_choice == 'N':
-            return
+            now = int(time.time())
+            waiting = data.real_pre_fill_timestamp - now
+            print(f"Please wait {waiting} seconds for filling time...")
+            time.sleep(waiting)
+            real_url = get_url()
+            on_time_submit(real_url, driver)
         else:
             print("Wrong command, now quit the program.")
     elif mode == 'T' or 'R' and check_registration_status() == Registration.gap:

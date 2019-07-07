@@ -27,15 +27,15 @@ def fetch_basic_info():
     # print(f'{basic_info} \n')
 
     data.test_url = basic_info["测试链接"][0]
-    data.test_start_datetime = datetime.strptime(basic_info["测试开始时间"][0], '%Y-%m-%d %H:%M')
+    data.test_start_datetime = datetime.strptime(basic_info["测试开始时间"][0], '%Y-%m-%d %H:%M:%S')
     data.test_start_timestamp = int(time.mktime(data.test_start_datetime.timetuple()))
-    data.test_end_datetime = datetime.strptime(basic_info["测试结束时间"][0], '%Y-%m-%d %H:%M')
+    data.test_end_datetime = datetime.strptime(basic_info["测试结束时间"][0], '%Y-%m-%d %H:%M:%S')
     data.test_end_timestamp = int(time.mktime(data.test_end_datetime.timetuple()))
 
     data.real_url = basic_info["正式链接"][0]
-    data.real_pre_fill_datetime = datetime.strptime(basic_info["开始填表时间"][0], '%Y-%m-%d %H:%M')
+    data.real_pre_fill_datetime = datetime.strptime(basic_info["开始填表时间"][0], '%Y-%m-%d %H:%M:%S')
     data.real_pre_fill_timestamp = int(time.mktime(data.real_pre_fill_datetime.timetuple()))
-    data.real_start_datetime = datetime.strptime(basic_info["报名开始时间"][0], '%Y-%m-%d %H:%M')
+    data.real_start_datetime = datetime.strptime(basic_info["报名开始时间"][0], '%Y-%m-%d %H:%M:%S')
     data.real_start_timestamp = int(time.mktime(data.real_start_datetime.timetuple()))
 
     data.team_name = basic_info["队伍名称"][0]
