@@ -96,7 +96,7 @@ def main():
         elif test_choice == 'N':
             now = int(time.time())
             waiting = data.real_pre_fill_timestamp - now
-            print(f"{fetch.current_time()}Please wait {waiting} seconds for filling time...")
+            print(f"{fetch.current_time()}The test time is {data.test_start_datetime}. Please wait {waiting}s")
             time.sleep(waiting)
             real_url = get_url()
             submit.selenium_submit(real_url, driver)
