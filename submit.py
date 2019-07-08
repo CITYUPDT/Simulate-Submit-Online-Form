@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import data
+import fetch
 
 import time
 from datetime import datetime
@@ -10,7 +11,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 def selenium_submit(url: str, driver):
 
-    print(f"Getting web page source from {url} ...")
+    print(f"{fetch.current_time()}Getting web page source from {url} ...")
 
     driver.get(url)
 
@@ -18,75 +19,100 @@ def selenium_submit(url: str, driver):
 
     # Registration web page source code
     page = BeautifulSoup(driver.page_source, 'lxml').prettify()
-    print(page)
+    # print(page)
 
-    print("Got source! \n")
-    time.sleep(3)
+    print(f"{fetch.current_time()}Got source! \n")
 
-    print('Now start filling...')
+    print(f'{fetch.current_time()}Now start filling...')
     # TODO: (Modify) Start filling the form
     q1 = driver.find_element_by_id("q1")
     q1.clear()
     q1.send_keys(data.team_name)
 
-    q2_1_js = 'document.getElementById("q2_1").checked = true'
-    driver.execute_script(q2_1_js)
+    team = data.team
+    teammate_no: int = len(team)
+    q_no: int = 2
 
-    q2_2_js = 'document.getElementById("q2_2").checked = true'
-    driver.execute_script(q2_2_js)
+    # 第2-11题是队长&副队长
+    for i in range(2):
+        q_name = driver.find_element_by_id(f"q{q_no}")
+        q_name.clear()
+        q_name.send_keys(team[i].name)
+        q_no = q_no + 1
 
-    q3 = driver.find_element_by_id("q3")
-    q3.clear()
-    q3.send_keys(data.team[0].name)
+        q_qq = driver.find_element_by_id(f"q{q_no}")
+        q_qq.clear()
+        q_qq.send_keys(team[i].qq)
+        q_no = q_no + 1
 
-    q4 = driver.find_element_by_id("q4")
-    q4.clear()
-    q4.send_keys(data.team[0].qq)
+        q_phone = driver.find_element_by_id(f"q{q_no}")
+        q_phone.clear()
+        q_phone.send_keys(team[i].phone)
+        q_no = q_no + 1
 
-    q5 = driver.find_element_by_id("q5")
-    q5.clear()
-    q5.send_keys(data.team[0].phone)
+        q_school = driver.find_element_by_id(f"q{q_no}")
+        q_school.clear()
+        q_school.send_keys(team[i].school)
+        q_no = q_no + 1
 
-    q6 = driver.find_element_by_id("q6")
-    q6.clear()
-    q6.send_keys(data.team[0].school)
+        q_year = driver.find_element_by_id(f"q{q_no}")
+        q_year.clear()
+        q_year.send_keys(team[i].year)
+        q_no = q_no + 1
 
-    q7 = driver.find_element_by_id("q7")
-    q7.clear()
-    q7.send_keys(data.team[0].year)
+        time.sleep(1)
 
-    q8 = driver.find_element_by_id("q8")
-    q8.clear()
-    q8.send_keys(data.team[1].name)
+    # 第12-29题是队员3-8
+    for i in range(teammate_no-2):
+        i = i + 2
 
-    q9 = driver.find_element_by_id("q9")
-    q9.clear()
-    q9.send_keys(data.team[1].school)
+        if team[i].name != '-1':
+            q_name = driver.find_element_by_id(f"q{q_no}")
+            q_name.clear()
+            q_name.send_keys(team[i].name)
+            q_no = q_no + 1
 
-    q10 = driver.find_element_by_id("q10")
-    q10.clear()
-    q10.send_keys(data.team[1].year)
+            q_school = driver.find_element_by_id(f"q{q_no}")
+            q_school.clear()
+            q_school.send_keys(team[i].school)
+            q_no = q_no + 1
 
-    q11 = driver.find_element_by_id("q11")
-    q11.clear()
-    q11.send_keys(data.judges[0].name)
+            q_year = driver.find_element_by_id(f"q{q_no}")
+            q_year.clear()
+            q_year.send_keys(team[i].year)
+            q_no = q_no + 1
 
-    q12 = driver.find_element_by_id("q12")
-    q12.clear()
-    q12.send_keys(data.judges[0].qq)
+            time.sleep(1)
 
-    q13 = driver.find_element_by_id("q13")
-    q13.clear()
-    q13.send_keys(data.judges[0].phone)
+    q30_1_js = 'document.getElementById("q30_1").checked = true'
+    driver.execute_script(q30_1_js)
 
-    q14 = driver.find_element_by_id("q14")
-    q14.clear()
-    q14.send_keys(data.judges[0].resume)
+    q30_2_js = 'document.getElementById("q30_2").checked = true'
+    driver.execute_script(q30_2_js)
 
-    time.sleep(3)
+    time.sleep(1)
 
-    print("All filled! \n")
-    time.sleep(3)
+    q31 = driver.find_element_by_id("q31")
+    q31.clear()
+    q31.send_keys(data.judges[0].name)
+
+    q32 = driver.find_element_by_id("q32")
+    q32.clear()
+    q32.send_keys(data.judges[0].year)
+
+    q33 = driver.find_element_by_id("q33")
+    q33.clear()
+    q33.send_keys(data.judges[0].qq)
+
+    q34 = driver.find_element_by_id("q34")
+    q34.clear()
+    q34.send_keys(data.judges[0].phone)
+
+    q35 = driver.find_element_by_id("q35")
+    q35.clear()
+    q35.send_keys(data.judges[0].resume)
+
+    print(f"{fetch.current_time()}All filled! \n")
 
     # Fill the form first
     # Wait until submit time
@@ -95,22 +121,25 @@ def selenium_submit(url: str, driver):
     driver.quit()
     end = time.time()
     registration_time = Decimal(end - start).quantize(Decimal('0.00'), rounding=ROUND_HALF_UP)
-    print(f"It took {registration_time} seconds, now quit!")
+    print(f"{fetch.current_time()}It took {registration_time} seconds, now quit!")
 
 
 def wait_until_submit(driver):
     now = int(time.time())
     waiting = data.real_start_timestamp - now
     if now < data.real_start_timestamp:
-        print(f"Please wait {waiting} seconds for submit time...")
-        time.sleep(waiting)
-    print("Click submit button now!\n")
-    driver.find_element_by_id('submit_button').click()
-    submitted_time = time.time()
+        print(f"{fetch.current_time()}Please wait {waiting} seconds until {data.real_start_datetime}...")
 
-    print(f"Registration success! \n\n"
-          f"Form is submitted at {datetime.utcfromtimestamp(submitted_time).strftime('%Y-%m-%d %H:%M:%S:%m')}")
+    while int(time.time()) < data.real_start_timestamp:
+        time.sleep(0.1)
+
+    print(f"{fetch.current_time()}Click submit button now!\n")
+    driver.find_element_by_id('submit_button').click()
+
+    reminder = f"{fetch.current_time()}Registration form is submitted!"
+
+    print(f"{reminder}")
 
 
 if __name__ == '__main__':
-    print(datetime.utcfromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S:%M'))
+    print(datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S:%M'))

@@ -62,28 +62,18 @@ def set_driver():
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
 
-    print("Setting up driver...")
+    print(f"{fetch.current_time()}Setting up driver...")
 
     driver = None
     if 'Windows' in platform.system():
         driver = webdriver.Chrome(executable_path='venv\chromedriver.exe', options=chrome_options)
-    print("Driver is set! \n")
+    print(f"{fetch.current_time()}Driver is set! \n")
     return driver
-
-
-def on_time_submit(url, driver):
-    submitted = False
-    while not submitted:
-        now = int(time.time())
-        if now >= data.real_pre_fill_timestamp:
-            submit.selenium_submit(url, driver)
-            submitted = True
-        time.sleep(1)
 
 
 def main():
     fetch.fetch_info()
-    print('\nFetched team info! \n')
+    print(f'\n{fetch.current_time()}Fetched team info! \n')
 
     headers = parse_header()
     url = get_url()
@@ -94,42 +84,43 @@ def main():
     # submit.selenium_submit(url, driver)
 
     # Count down mode
-    mode = input("Test or Real registration? (T/R) ")
+    mode = input(f"{fetch.current_time()}Test or Real registration? (T/R) ")
     print('')
     if mode == 'T' and check_registration_status() == Registration.test:
         submit.selenium_submit(url, driver)
     elif mode == 'R' and check_registration_status() == Registration.test:
-        test_choice = input("Now is still testing time, would you like to test? (Y/N) ")
+        test_choice = input(f"{fetch.current_time()}Now is still testing time, would you like to test? (Y/N) ")
         print('')
         if test_choice == 'Y':
             submit.selenium_submit(url, driver)
         elif test_choice == 'N':
             now = int(time.time())
             waiting = data.real_pre_fill_timestamp - now
-            print(f"Please wait {waiting} seconds for filling time...")
+            print(f"{fetch.current_time()}Please wait {waiting} seconds for filling time...")
             time.sleep(waiting)
             real_url = get_url()
-            on_time_submit(real_url, driver)
+            submit.selenium_submit(real_url, driver)
         else:
-            print("Wrong command, now quit the program.")
+            print(f"{fetch.current_time()}Wrong command, now quit the program.")
     elif mode == 'T' or 'R' and check_registration_status() == Registration.gap:
-        print("Now is neither testing time nor real time for registration")
+        print(f"{fetch.current_time()}Now is neither testing time nor real time for registration")
         now = int(time.time())
         if now < data.test_start_timestamp:
             waiting = data.test_start_timestamp - now
-            print(f"Please wait {waiting} seconds for testing time...")
+            print(f"{fetch.current_time()}The test time is {data.test_start_datetime}. Please wait {waiting}s")
             time.sleep(waiting - 10)
-            on_time_submit(url, driver)
+            submit.selenium_submit(url, driver)
         elif data.test_end_timestamp < now < data.real_pre_fill_timestamp:
             waiting = data.real_pre_fill_timestamp - now
-            print(f"Please wait {waiting} seconds for filling time...")
+            print(f"{fetch.current_time()}The filling time is {data.real_pre_fill_datetime}. Please wait {waiting}s")
             time.sleep(waiting - 10)
             real_url = get_url()
-            on_time_submit(real_url, driver)
+            submit.selenium_submit(real_url, driver)
     elif mode == 'T' or 'R' and check_registration_status() == Registration.real:
         now = int(time.time())
         late = now - data.real_pre_fill_timestamp
-        real_choice = input(f"Now is real time and late for {late} seconds! Registration start now? (Y/N)")
+        real_choice = input(f"{fetch.current_time()}The real time for filling is {data.real_pre_fill_datetime} "
+                            f"and it start for {late} seconds! Registration start now? (Y/N)")
         print('')
         if real_choice == 'Y' or 'y':
             real_url = get_url()

@@ -12,7 +12,8 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 pd.set_option('display.max_colwidth', 100)
 
-team_info_file = "test.xlsx"
+# TODO: Remember to change file name
+team_info_file = "test.xlsx"  # team-info.xlsx
 
 
 def fetch_info():
@@ -82,6 +83,12 @@ def fetch_judge_info():
 
         judge = data.Judge(name, year, qq, phone, resume)
         data.judges.append(judge)
+
+
+def current_time() -> str:
+    now_time = time.time()
+    readable_time = datetime.fromtimestamp(now_time).strftime('%H:%M:%S:%m - ')
+    return readable_time
 
 
 if __name__ == '__main__':
