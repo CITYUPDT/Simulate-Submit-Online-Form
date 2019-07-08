@@ -14,6 +14,7 @@ mail_user="xxx"
 mail_pass="xxx"
 mail_port = 443
 
+
 def send_email(msg):
     message = MIMEText(msg, 'plain', 'utf-8')
     message['From'] = formataddr(["Reminder", sender])
