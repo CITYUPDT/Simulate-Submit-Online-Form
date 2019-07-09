@@ -13,7 +13,7 @@ pd.set_option('display.width', 500)
 pd.set_option('display.max_colwidth', 100)
 
 # TODO: Remember to change file name
-team_info_file = "test.xlsx"  # team-info.xlsx
+team_info_file = "team-info.xlsx"  # team-info.xlsx
 
 
 def fetch_info():
