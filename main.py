@@ -58,7 +58,7 @@ def get_url() -> str:
 def set_driver():
     # Set driver
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.headless = True
+    chrome_options.headless = False
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
 
